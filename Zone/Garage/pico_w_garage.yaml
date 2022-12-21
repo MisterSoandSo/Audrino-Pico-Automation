@@ -1,0 +1,62 @@
+#Basic Garage Door Sensor
+esphome:
+  name: pico-w-garage
+
+rp2040:
+  board: rpipicow
+  framework:
+    # Required until https://github.com/platformio/platform-raspberrypi/pull/36 is merged
+    platform_version: https://github.com/maxgerhardt/platform-raspberrypi.git
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# Enable logging
+logger:
+
+output:
+  - platform: gpio
+    pin:
+      number: 32  # 25 for Pico (non-W)
+      mode: output
+    id: LED
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: 2
+      mode:
+        input: true 
+        pullup: true 
+        output: false
+        open_drain: false
+        pulldown: false
+      inverted: false
+    name: Garage Door
+    id: garage_door
+    device_class: door
+    filters:
+      - delayed_on: 10ms
+    disabled_by_default: False
+    on_state:
+      then:
+        - if:
+            condition:
+              - binary_sensor.is_on: garage_door
+            then:
+              - output.turn_on: LED
+            else:
+              - output.turn_off: LED
+        
+
+
+    
