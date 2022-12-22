@@ -1,3 +1,5 @@
 /.esphome/
-/secrets.yaml
-/rpi-pico.uf2
+/debug
+/test
+secrets.yaml
+rpi-pico.uf2
