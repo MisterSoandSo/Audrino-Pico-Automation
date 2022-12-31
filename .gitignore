@@ -3,3 +3,4 @@
 /test
 secrets.yaml
 rpi-pico.uf2
+secrets.py
